@@ -15,9 +15,9 @@ import com.hootsuite.krrxd.persistence.User.Companion.TABLE_NAME
  */
 @Entity(tableName = TABLE_NAME,
         indices = arrayOf(Index(value = COLUMN_USER_NAME, unique = true)))
-data class User(@PrimaryKey(autoGenerate = true) var id: Long = 0,
-                @ColumnInfo(name = COLUMN_USER_NAME) var userName: String,
-                var password: String) {
+data class User(@PrimaryKey(autoGenerate = true) val id: Long = 0,
+                @ColumnInfo(name = COLUMN_USER_NAME) val userName: String,
+                val password: String) {
 
     companion object {
 

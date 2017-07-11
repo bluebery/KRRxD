@@ -26,3 +26,11 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+    versions = [
+            support_lib: '25.4.0',
+            dagger     : '2.11',
+            arch_comp  : '1.0.0-alpha3'
+    ]
+}

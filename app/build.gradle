@@ -7,7 +7,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
-        applicationId "com.hootsuite.kotlinroom1"
+        applicationId "com.hootsuite.krrxd"
         minSdkVersion 21
         targetSdkVersion 25
         versionCode 1

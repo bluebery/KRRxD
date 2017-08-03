@@ -77,13 +77,13 @@ class LoginActivity : DaggerAppCompatActivity() {
         // Now, every time the user records are updated, our Flowable object will emit automatically, allowing you to update the UI based on the latest data.
         // The Flowable will emit only when the query result contains at least a row.
         // When there is no data to match the query, the Flowable will not emit, neither onNext nor onError.
-        userDao.getAllUsers()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { (recycler_view.adapter as CurrentUsersRecyclerAdapter).users = it },
-                        { throwable -> Log.d("LoginActivity", throwable.message) },
-                        { Log.d("LoginActivity", "completed get all") })
+//        userDao.getAllUsers()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(
+//                        { (recycler_view.adapter as CurrentUsersRecyclerAdapter).users = it },
+//                        { throwable -> Log.d("LoginActivity", throwable.message) },
+//                        { Log.d("LoginActivity", "completed get all") })
 
         recycler_view.setup(loginViewModel)
 

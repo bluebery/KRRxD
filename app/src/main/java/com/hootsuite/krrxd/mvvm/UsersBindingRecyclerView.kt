@@ -27,7 +27,7 @@ class UsersBindingRecyclerView: BindingRecyclerView<List<User>> {
     var disposable : Disposable? = null
 
     override fun setup(listViewModel: ListViewModel<List<User>>) {
-        disposable = listViewModel.flowable
+        disposable = listViewModel.results
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -35,10 +35,23 @@ class UsersBindingRecyclerView: BindingRecyclerView<List<User>> {
                             (adapter as CurrentUsersRecyclerAdapter).users = it
                         },
                         { throwable ->
-                            Log.d("LoginActivity", throwable.message)
+                            Log.d("UsersBindingRecycler", throwable.message)
                         },
                         {
-                            Log.d("LoginActivity", "completed get all")
+                            Log.d("UsersBindingRecycler", "completed behaviour subscribe")
                         })
+//        disposable = listViewModel.flowable
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(
+//                        {
+//                            (adapter as CurrentUsersRecyclerAdapter).users = it
+//                        },
+//                        { throwable ->
+//                            Log.d("LoginActivity", throwable.message)
+//                        },
+//                        {
+//                            Log.d("LoginActivity", "completed get all")
+//                        })
     }
 }

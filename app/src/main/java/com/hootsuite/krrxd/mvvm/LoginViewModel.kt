@@ -17,6 +17,7 @@ class LoginViewModel @Inject constructor() : ListViewModel<List<User>> {
     @Inject
     lateinit var userDao: UserDao
 
+    // todo transform the users for display, only emit items that are directly displayable in the adapter
     override val flowable: Flowable<List<User>>
         get() = userDao.getAllUsers()
 }

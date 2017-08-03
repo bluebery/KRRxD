@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import com.hootsuite.krrxd.mvvm.LoginViewModel
 import com.hootsuite.krrxd.persistence.User
 import com.hootsuite.krrxd.persistence.UserDao
 import dagger.android.support.DaggerAppCompatActivity
@@ -18,6 +19,8 @@ class LoginActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var userDao: UserDao
+    @Inject
+    lateinit var loginViewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,17 +69,23 @@ class LoginActivity : DaggerAppCompatActivity() {
                             { Log.d("LoginActivity", "deleted users") },
                             { throwable -> Log.d("LoginActivity", throwable.message) }
                     )
+
+            Log.d("LoginActivity", "isDisposed " + recycler_view.disposable?.isDisposed)
         }
 
+        // https://medium.com/google-developers/room-rxjava-acb0cd4f3757
         // Now, every time the user records are updated, our Flowable object will emit automatically, allowing you to update the UI based on the latest data.
         // The Flowable will emit only when the query result contains at least a row.
         // When there is no data to match the query, the Flowable will not emit, neither onNext nor onError.
-        userDao.getAllUsers()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { (recycler_view.adapter as CurrentUsersRecyclerAdapter).users = it },
-                        { throwable -> Log.d("LoginActivity", throwable.message) },
-                        { Log.d("LoginActivity", "completed get all") })
+//        userDao.getAllUsers()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(
+//                        { (recycler_view.adapter as CurrentUsersRecyclerAdapter).users = it },
+//                        { throwable -> Log.d("LoginActivity", throwable.message) },
+//                        { Log.d("LoginActivity", "completed get all") })
+
+        recycler_view.setup(loginViewModel)
+
     }
 }

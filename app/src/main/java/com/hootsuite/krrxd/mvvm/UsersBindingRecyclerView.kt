@@ -7,11 +7,9 @@ import android.util.Log
 import com.hootsuite.krrxd.CurrentUsersRecyclerAdapter
 import com.hootsuite.krrxd.persistence.User
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_login.*
 
-class UsersBindingRecyclerView: BindingRecyclerView<List<User>> {
+class UsersBindingRecyclerView : BindingRecyclerView<List<User>> {
 
     // used when given in code or xml
     @JvmOverloads
@@ -24,12 +22,9 @@ class UsersBindingRecyclerView: BindingRecyclerView<List<User>> {
         RecyclerView(context, attrs, defStyleAttr)
     }
 
-    var disposable : Disposable? = null
-
     override fun setup(listViewModel: ListViewModel<List<User>>) {
-        disposable = listViewModel.results
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        listViewModel
+                .results
                 .subscribe(
                         {
                             (adapter as CurrentUsersRecyclerAdapter).users = it
@@ -40,18 +35,5 @@ class UsersBindingRecyclerView: BindingRecyclerView<List<User>> {
                         {
                             Log.d("UsersBindingRecycler", "completed behaviour subscribe")
                         })
-//        disposable = listViewModel.flowable
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(
-//                        {
-//                            (adapter as CurrentUsersRecyclerAdapter).users = it
-//                        },
-//                        { throwable ->
-//                            Log.d("LoginActivity", throwable.message)
-//                        },
-//                        {
-//                            Log.d("LoginActivity", "completed get all")
-//                        })
     }
 }

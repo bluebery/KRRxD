@@ -1,8 +1,7 @@
 package com.hootsuite.krrxd.mvvm
 
-import io.reactivex.Flowable
-import io.reactivex.subjects.BehaviorSubject
+import com.jakewharton.rxrelay2.BehaviorRelay
 
-interface ListViewModel<T> {
-    var results: BehaviorSubject<T>
+interface ListViewModel<T> : ViewModel {
+    val results: BehaviorRelay<T>
 }

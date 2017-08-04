@@ -1,8 +1,6 @@
 package com.hootsuite.krrxd.mvvm
 
-import android.support.design.widget.Snackbar
 import android.util.Log
-import android.view.View
 import com.hootsuite.krrxd.persistence.User
 import com.hootsuite.krrxd.persistence.UserDao
 import com.jakewharton.rxrelay2.BehaviorRelay
@@ -11,7 +9,6 @@ import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -33,15 +30,9 @@ class LoginListViewModel @Inject constructor(val userDao: UserDao) : ListViewMod
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                {
-                                    results.accept(it)
-                                },
-                                { throwable ->
-                                    Log.d("LoginViewModel", throwable.message)
-                                },
-                                {
-                                    Log.d("LoginViewModel", "completed get all")
-                                }))
+                                { results.accept(it) },
+                                { throwable -> Log.d("LoginViewModel", throwable.message) },
+                                { Log.d("LoginViewModel", "completed get all") }))
     }
 
     override fun dispose() {
@@ -55,15 +46,9 @@ class LoginListViewModel @Inject constructor(val userDao: UserDao) : ListViewMod
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                { user ->
-                                    userMessage?.invoke(if (user.password == password) "Login successful" else "Incorrect password")
-                                },
-                                { throwable ->
-                                    Log.d("LoginActivity", throwable.message)
-                                },
-                                {
-                                    userMessage?.invoke("User does not exist")
-                                }))
+                                { user -> userMessage?.invoke(if (user.password == password) "Login successful" else "Incorrect password") },
+                                { throwable -> Log.d("LoginActivity", throwable.message) },
+                                { userMessage?.invoke("User does not exist") }))
     }
 
     internal fun register(email: String, password: String, userMessage: ((String) -> Unit)? = null) {
@@ -73,22 +58,19 @@ class LoginListViewModel @Inject constructor(val userDao: UserDao) : ListViewMod
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                {
-                                    userMessage?.invoke("Registered!")
-                                },
-                                { throwable ->
-                                    Log.d("LoginActivity", throwable.message)
-                                }))
+                                { userMessage?.invoke("Registered!") },
+                                { throwable -> Log.d("LoginActivity", throwable.message) }))
     }
 
     fun clearUsers() {
-        compositeDisposable.add(Completable
-                .fromCallable { userDao.deleteAllUsers() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { Log.d("LoginActivity", "deleted users") },
-                        { throwable -> Log.d("LoginActivity", throwable.message) }
-                ))
+        compositeDisposable.add(
+                Completable
+                        .fromCallable { userDao.deleteAllUsers() }
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                { Log.d("LoginActivity", "deleted users") },
+                                { throwable -> Log.d("LoginActivity", throwable.message) }
+                        ))
     }
 }

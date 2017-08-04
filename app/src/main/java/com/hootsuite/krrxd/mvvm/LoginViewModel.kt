@@ -17,9 +17,6 @@ class LoginViewModel @Inject constructor(val userDao: UserDao) : ListViewModel<L
 
     override var results: BehaviorSubject<List<User>> = BehaviorSubject.create()
 
-//    override val results: List<User> = listOf()
-//        get() = field
-
     init {
         userDao.getAllUsers()
                 .subscribeOn(Schedulers.io())
@@ -35,8 +32,4 @@ class LoginViewModel @Inject constructor(val userDao: UserDao) : ListViewModel<L
                             Log.d("LoginViewModel", "completed get all")
                         })
     }
-
-    // todo transform the users for display, only emit items that are directly displayable in the adapter
-    override val flowable: Flowable<List<User>>
-        get() = userDao.getAllUsers()
 }

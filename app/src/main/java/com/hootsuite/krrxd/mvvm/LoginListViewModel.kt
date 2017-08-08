@@ -19,7 +19,7 @@ class LoginListViewModel @Inject constructor(val userDao: UserDao, val scheduler
 
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    override fun create() {
+    override fun setup() {
         // https://medium.com/google-developers/room-rxjava-acb0cd4f3757
         // Now, every time the user records are updated, our Flowable object will emit automatically, allowing you to update the UI based on the latest data.
         // The Flowable will emit only when the query result contains at least a row.
@@ -30,8 +30,8 @@ class LoginListViewModel @Inject constructor(val userDao: UserDao, val scheduler
                         .subscribeOn(scheduler)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                { something: List<User> ->
-                                    results.accept(something)
+                                {
+                                    results.accept(it)
                                 },
                                 { throwable ->
                                     Log.d("LoginViewModel", throwable.message)
@@ -45,8 +45,8 @@ class LoginListViewModel @Inject constructor(val userDao: UserDao, val scheduler
 
     internal fun signIn(email: String, password: String, userMessage: ((String) -> Unit)? = null) {
         compositeDisposable.add(
-                Maybe
-                        .fromCallable { userDao.getUser(email) }
+                userDao
+                        .getUser(email)
                         .subscribeOn(scheduler)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(

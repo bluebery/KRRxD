@@ -28,7 +28,7 @@ class LoginActivity : DaggerAppCompatActivity() {
 
         bindLoginListViewModel().also { viewModels.add(it) }
 
-        viewModels.forEach { it.create() }
+        viewModels.forEach { it.setup() }
     }
 
     override fun onDestroy() {

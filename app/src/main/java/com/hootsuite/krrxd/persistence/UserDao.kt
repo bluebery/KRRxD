@@ -24,7 +24,7 @@ interface UserDao {
      * For now, we have to wrap this in a fromCallable() in the consuming class.
      */
     @Query(value = "select * from ${User.TABLE_NAME} where ${User.COLUMN_USER_NAME} = :userName")
-    fun getUser(userName: String): User
+    fun getUser(userName: String): Maybe<User>
 
     /**
      * Inserts the user and returns [Unit].

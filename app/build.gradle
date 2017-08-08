@@ -4,12 +4,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "com.hootsuite.krrxd"
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -69,5 +69,4 @@ dependencies {
     kapt ("android.arch.persistence.room:compiler:$rootProject.versions.arch_comp"){
         exclude group: 'com.android.support', module: 'support-core-utils'
     }
-
 }

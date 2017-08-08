@@ -29,7 +29,8 @@ class LoginListViewModelTest {
         appDatabase = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         userDao = appDatabase.userDao()
 
-        loginListViewModel = LoginListViewModel(userDao, Schedulers.trampoline()).apply { setup() }
+        loginListViewModel = LoginListViewModel(userDao, Schedulers.trampoline())
+        loginListViewModel.setup()
     }
 
     @After

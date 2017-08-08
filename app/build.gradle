@@ -48,21 +48,12 @@ dependencies {
     implementation "com.jakewharton.rxrelay2:rxrelay:2.0.0"
 
     // Room
-    implementation ("android.arch.persistence.room:runtime:$rootProject.versions.arch_comp") {
-        exclude group: 'com.android.support', module: 'support-core-utils'
-    }
-    implementation ("android.arch.persistence.room:rxjava2:$rootProject.versions.arch_comp") {
-        exclude group: 'com.android.support', module: 'support-core-utils'
-    }
-    kapt ("android.arch.persistence.room:compiler:$rootProject.versions.arch_comp"){
-        exclude group: 'com.android.support', module: 'support-core-utils'
-    }
+    implementation "android.arch.persistence.room:runtime:$rootProject.versions.arch_comp"
+    implementation "android.arch.persistence.room:rxjava2:$rootProject.versions.arch_comp"
+    kapt "android.arch.persistence.room:compiler:$rootProject.versions.arch_comp"
 
-
-    // Tests
+    // Instrumentation Tests
     androidTestImplementation 'com.android.support.test:runner:1.0.0'
     androidTestImplementation 'org.mockito:mockito-core:2.8.47'
-
-    // dex maker is required for mockito in instrumentation tests
-    androidTestImplementation 'com.linkedin.dexmaker:dexmaker-mockito:2.2.0'
+    androidTestImplementation 'com.linkedin.dexmaker:dexmaker-mockito:2.2.0' // dex maker is required for mockito in instrumentation tests
 }

@@ -47,6 +47,10 @@ class LoginActivity : DaggerAppCompatActivity() {
             loginListViewModel.register(email = email.text.toString(), password = password.text.toString()) { displayMessage(it) }
         }
 
+        change_password_button.setOnClickListener {
+            loginListViewModel.changePassword(email = email.text.toString(), newPassword = password.text.toString()) { displayMessage(it) }
+        }
+
         clear_button.setOnClickListener { loginListViewModel.clearUsers() }
 
         return loginListViewModel.also { recycler_view.setup(it) }

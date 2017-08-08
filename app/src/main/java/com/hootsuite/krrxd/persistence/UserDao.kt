@@ -34,6 +34,13 @@ interface UserDao {
     fun insertUser(user: User)
 
     /**
+     * Updates an individual [User] and returns [Unit].
+     * This differs from [insertUser] in that it modifies the record in place in event of a PK match rather than replacing on index defined in [User].
+     */
+    @Update
+    fun updateUser(user: User)
+
+    /**
      * Deletes all users and returns [Unit].
      */
     @Query(value = "delete from ${User.TABLE_NAME}")

@@ -5,7 +5,6 @@ import com.hootsuite.krrxd.persistence.User
 import com.hootsuite.krrxd.persistence.UserDao
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Completable
-import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
@@ -72,6 +71,24 @@ class LoginListViewModel @Inject constructor(val userDao: UserDao, val scheduler
 
     internal fun register(email: String, password: String, userMessage: ((String) -> Unit)? = null) =
             register(User(userName = email, password = password), userMessage)
+
+    internal fun changePassword(email: String, newPassword: String, userMessage: ((String) -> Unit)? = null) {
+        compositeDisposable.add(
+                Completable
+                        .fromCallable {
+                            results.value.find { it.userName == email }?.let {
+                                userDao.updateUser(it.apply { password = newPassword })
+                            } ?: throw IllegalArgumentException("user does not exist")
+                        }
+                        .subscribeOn(scheduler)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                {
+                                    userMessage?.invoke("Password Changed!")
+                                },
+                                { throwable -> Log.d("LoginActivity", throwable.message) }
+                        ))
+    }
 
     fun clearUsers() {
         compositeDisposable.add(

@@ -8,12 +8,12 @@ import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
+import io.reactivex.Scheduler
 
 @Singleton
-class LoginListViewModel @Inject constructor(val userDao: UserDao) : ListViewModel<List<User>> {
+class LoginListViewModel @Inject constructor(val userDao: UserDao, val scheduler: Scheduler) : ListViewModel<List<User>> {
 
     override val results: BehaviorRelay<List<User>> = BehaviorRelay.create()
 
@@ -27,15 +27,15 @@ class LoginListViewModel @Inject constructor(val userDao: UserDao) : ListViewMod
         compositeDisposable.add(
                 userDao
                         .getAllUsers()
-                        .subscribeOn(Schedulers.trampoline())
-                        //.subscribeOn(Schedulers.io())
+                        .subscribeOn(scheduler)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 { something: List<User> ->
                                     results.accept(something)
                                 },
                                 { throwable ->
-                                    Log.d("LoginViewModel", throwable.message) },
+                                    Log.d("LoginViewModel", throwable.message)
+                                },
                                 { Log.d("LoginViewModel", "completed get all") }))
     }
 
@@ -47,7 +47,7 @@ class LoginListViewModel @Inject constructor(val userDao: UserDao) : ListViewMod
         compositeDisposable.add(
                 Maybe
                         .fromCallable { userDao.getUser(email) }
-                        .subscribeOn(Schedulers.io())
+                        .subscribeOn(scheduler)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 { user -> userMessage?.invoke(if (user.password == password) "Login successful" else "Incorrect password") },
@@ -59,12 +59,12 @@ class LoginListViewModel @Inject constructor(val userDao: UserDao) : ListViewMod
         compositeDisposable.add(
                 Completable
                         .fromCallable { userDao.insertUser(user) }
-                        //.subscribeOn(Schedulers.io())
-                        .subscribeOn(Schedulers.trampoline())
+                        .subscribeOn(scheduler)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 {
-                                    userMessage?.invoke("Registered!") },
+                                    userMessage?.invoke("Registered!")
+                                },
                                 { throwable ->
                                     Log.d("LoginActivity", throwable.message)
                                 }))
@@ -77,7 +77,7 @@ class LoginListViewModel @Inject constructor(val userDao: UserDao) : ListViewMod
         compositeDisposable.add(
                 Completable
                         .fromCallable { userDao.deleteAllUsers() }
-                        .subscribeOn(Schedulers.io())
+                        .subscribeOn(scheduler)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 { Log.d("LoginActivity", "deleted users") },

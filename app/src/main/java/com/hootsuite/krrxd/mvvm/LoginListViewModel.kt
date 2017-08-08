@@ -27,11 +27,15 @@ class LoginListViewModel @Inject constructor(val userDao: UserDao) : ListViewMod
         compositeDisposable.add(
                 userDao
                         .getAllUsers()
-                        .subscribeOn(Schedulers.io())
+                        .subscribeOn(Schedulers.trampoline())
+                        //.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                { results.accept(it) },
-                                { throwable -> Log.d("LoginViewModel", throwable.message) },
+                                { something: List<User> ->
+                                    results.accept(something)
+                                },
+                                { throwable ->
+                                    Log.d("LoginViewModel", throwable.message) },
                                 { Log.d("LoginViewModel", "completed get all") }))
     }
 
@@ -51,16 +55,23 @@ class LoginListViewModel @Inject constructor(val userDao: UserDao) : ListViewMod
                                 { userMessage?.invoke("User does not exist") }))
     }
 
-    internal fun register(email: String, password: String, userMessage: ((String) -> Unit)? = null) {
+    internal fun register(user: User, userMessage: ((String) -> Unit)? = null) {
         compositeDisposable.add(
                 Completable
-                        .fromCallable { userDao.insertUser(User(userName = email, password = password)) }
-                        .subscribeOn(Schedulers.io())
+                        .fromCallable { userDao.insertUser(user) }
+                        //.subscribeOn(Schedulers.io())
+                        .subscribeOn(Schedulers.trampoline())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                { userMessage?.invoke("Registered!") },
-                                { throwable -> Log.d("LoginActivity", throwable.message) }))
+                                {
+                                    userMessage?.invoke("Registered!") },
+                                { throwable ->
+                                    Log.d("LoginActivity", throwable.message)
+                                }))
     }
+
+    internal fun register(email: String, password: String, userMessage: ((String) -> Unit)? = null) =
+            register(User(userName = email, password = password), userMessage)
 
     fun clearUsers() {
         compositeDisposable.add(

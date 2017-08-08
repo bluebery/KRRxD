@@ -9,7 +9,7 @@ import android.arch.persistence.room.RoomDatabase
  *
  * Exposes the DAO for given entities
  */
-@Database(entities = arrayOf(User::class), version = 2, exportSchema = false)
+@Database(entities = arrayOf(User::class), version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
